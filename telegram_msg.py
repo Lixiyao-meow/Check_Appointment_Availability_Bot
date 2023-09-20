@@ -1,15 +1,12 @@
 import requests
-import json
+import os
+import dotenv
 
-def send_telegram_msg(message):
+def send_telegram_msg(message: str):
+    token = os.getenv("TOKEN")
+    chat_id = os.getenv("CHAT_ID")
 
-    with open("config.json", "r") as f:
-        config = json.load(f)
-    
-    TOKEN = config["TOKEN"]
-    chat_id = config["chat_id"]
-
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+    url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={message}"
 
     # send message
-    requests.get(url).json()
+    return requests.get(url).status_code
