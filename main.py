@@ -1,21 +1,25 @@
+import os
 import time
 import random
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import dotenv
 
 import telegram_msg
 
-def init_driver():
+def init_driver(proxy_url: str | None = None) -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
+    if proxy_url is not None:
+        options.add_argument(f"--proxy-server=%s" % proxy_url)
     options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=options)
     return driver
 
-def check_checkbox(driver):
+def check_checkbox(driver: webdriver.Chrome):
     try:
         checkbox = driver.find_element(By.ID, "condition")
         driver.execute_script("arguments[0].scrollIntoView();", checkbox)
@@ -27,7 +31,7 @@ def check_checkbox(driver):
         print("checkbox error: ", e)
         #telegram_msg.send_telegram_msg("checkbox error: " + str(e))
 
-def go_to_booking_page(driver):
+def go_to_booking_page(driver: webdriver.Chrome):
     try:
         button_xpath = "//*[@id='submit_Booking']/input[1]"
         WebDriverWait(driver, 10).until(
@@ -38,7 +42,7 @@ def go_to_booking_page(driver):
         print("go to next page error: ", e)
         #telegram_msg.send_telegram_msg("go to next page error: " + str(e))
 
-def check_availability(driver):
+def check_availability(driver: webdriver.Chrome):
     try:
         # wait until the next page is loaded
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "header_Booking")))
@@ -56,6 +60,7 @@ def check_availability(driver):
 
 
 if __name__ == "__main__":
+    dotenv.load_dotenv()
     
     start_time = time.time()
 
@@ -70,7 +75,7 @@ if __name__ == "__main__":
     list_url_name = ["deposer demande", "renouvellement rcpc", "remise titre"]
 
     # initialize Chrome driver
-    chrom_driver = init_driver()
+    chrom_driver = init_driver(os.getenv("PROXY_URL"))
 
     # loop through the url while no available slot
     while True:
