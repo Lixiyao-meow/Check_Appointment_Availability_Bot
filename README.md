@@ -14,21 +14,28 @@ Ce GitHub a été conçu pour checker automatiquement de nouveaux créneaux de r
 
 ## Environment setup
 
-Install packages with
+### Packages
+
+Installation with [poetry](https://python-poetry.org)
 ```
-pip install selenium
-pip install requests
+poetry install
+```
+
+Installation with pip
+```
+pip install requests selenium python-dotenv
 ```
 
 The message sending process requires you to set up your own Telegram bot. You can follow the process [here](https://stackoverflow.com/questions/75116947/how-to-send-messages-to-telegram-using-python).
 
-Save your token and chat ID in a file named ```config.json``` within the same folder:
+### Environment variables
+Set the environment variables `TOKEN` and `CHAT_ID`.
+
+Alternatively, save your token and chat ID in a file named ```.env``` within the same folder:
 
 ```
-{
-    "TOKEN": {your bot TOKEN},
-    "chat_id": {your chat id}
-}
+TOKEN={your bot TOKEN},
+CHAT_ID={your chat id}
 ```
 
 You may need to adjust the domain URL in ```main.py``` to match the corresponding prefecture and service.
