@@ -23,7 +23,7 @@ poetry install
 
 Installation with pip
 ```
-pip install requests selenium python-dotenv
+poetry add requests selenium python-dotenv
 ```
 
 The message sending process requires you to set up your own Telegram bot. You can follow the process [here](https://stackoverflow.com/questions/75116947/how-to-send-messages-to-telegram-using-python).
